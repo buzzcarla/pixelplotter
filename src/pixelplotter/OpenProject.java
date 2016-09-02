@@ -25,8 +25,8 @@ public class OpenProject {
         chooser.setAcceptAllFileFilterUsed(false);
             if (chooser.showOpenDialog(parentFrame) == JFileChooser.APPROVE_OPTION) {
                 projectPathString = chooser.getSelectedFile().getAbsolutePath();
+                PixelPlotterMain.status.setText("Existing project opened at " + projectPathString);
             }
-        PixelPlotterMain.status.setText("Existing project opened at " + projectPathString);
         return projectPathString;
     }
 }

@@ -46,6 +46,7 @@ public class SaveIcon {
                 }
                 fw.write("\n");
             }
+            PixelPlotterMain.status.setText(iconName + " saved successfully.");
             fw.close();
         }
         catch(IOException ioe)

@@ -5,12 +5,16 @@
  */
 package pixelplotter;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -19,6 +23,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
+import javax.swing.border.Border;
 
 /**
  *
@@ -41,10 +46,14 @@ public class CreateNewProject {
     private String projectPathString;
     private String projectNameString;
     
-    public void createNewPojectWindow(JFrame parentFrame)
+    public void createNewPojectWindow(JFrame parentFrame, Point coordinates, Dimension dimension)
     {
         mainWindow = new JFrame("Create New Project");
+        mainWindow.setSize(dimension);
+        mainWindow.setLocation(coordinates);
+        mainWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         projectName = new JTextField("", 20);
+        final Border border = projectName.getBorder();
         browseDirectory = new JButton("Browse");
         browseDirectory.addActionListener(new java.awt.event.ActionListener() {
             @Override
@@ -54,18 +63,52 @@ public class CreateNewProject {
         });
         
         cancel = new JButton("Cancel");
+        cancel.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainWindow.dispose();
+            }
+        });
         finish = new JButton("Create");
         finish.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                projectNameString = projectName.getText();
-                projectPathString = projectPathString + "\\" + projectName.getText();
-                File directory = new File(projectPathString);
-                if (!directory.exists())
+                if (!(projectName.getText().isEmpty() || projectPath.getText().isEmpty()))
                 {
-                    directory.mkdir();
-                    mainWindow.setVisible(false);
-                    PixelPlotterMain.status.setText("New project " + projectName.getText() + " created");
+                    if (new File(projectPath.getText()).exists())
+                    {
+                        projectNameString = projectName.getText();
+                        projectPathString = projectPathString + "\\" + projectName.getText();
+                        File directory = new File(projectPathString);
+                        if (!directory.exists())
+                        {
+                            directory.mkdir();
+                            mainWindow.setVisible(false);
+                            PixelPlotterMain.status.setText("New project " + projectName.getText() + " created");
+                        }
+                    }
+                    else
+                        projectPath.setBorder(BorderFactory.createLineBorder(Color.red));
+                }
+                else
+                {
+                    if(projectName.getText().isEmpty() && projectPath.getText().isEmpty())
+                    {
+                        projectName.setBorder(BorderFactory.createLineBorder(Color.red));
+                        projectPath.setBorder(BorderFactory.createLineBorder(Color.red));
+                    }
+                    else if(!(projectName.getText().isEmpty()) && projectPath.getText().isEmpty())
+                    {
+                        projectName.setBorder(border);
+                        projectPath.setBorder(BorderFactory.createLineBorder(Color.red));
+                    }
+                    else
+                    {
+                        projectName.setBorder(BorderFactory.createLineBorder(Color.red));
+                        projectPath.setBorder(border);
+                    }
+                        
+                        
                 }
             }
         });
@@ -105,10 +148,12 @@ public class CreateNewProject {
         projectButtons.add(cancel);
         dividedLayout = new JSplitPane(JSplitPane.VERTICAL_SPLIT, projectSettings, projectButtons);
         
-        mainWindow.setLocationRelativeTo(parentFrame);
+       
+        
         mainWindow.add(dividedLayout);
-        mainWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        mainWindow.pack();
+        mainWindow.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        //mainWindow.pack();
+        mainWindow.setResizable(false);
         mainWindow.setVisible(true);
     }
     
@@ -126,7 +171,6 @@ public class CreateNewProject {
                 PixelPlotterMain mainWindow = new PixelPlotterMain();
                 mainWindow.setWorkingDirectory(projectPathString);
             }
-        
     }
     
     public String getWorkingDirectory()
