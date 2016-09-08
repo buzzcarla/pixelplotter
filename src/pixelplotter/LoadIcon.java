@@ -20,24 +20,23 @@ import javax.swing.JFrame;
 public class LoadIcon {
     
     
-    public ColorGrid loadIconFileChooserLauncher(String workingDirectory, JFrame parentFrame, ColorGrid mainPanel)
+    public ColorGrid loadIconFileChooserLauncher(String fileName, JFrame parentFrame, ColorGrid mainPanel)
     {
         ColorGrid newColorGrid = null;
-        String fileName = null;
         BufferedReader reader = null;
         int x = 0, w = 0;
         int icon_rows, icon_columns;
         
-        JFileChooser chooser = new JFileChooser(new File(workingDirectory));
-        int status = chooser.showOpenDialog(parentFrame);
-        if (status == JFileChooser.APPROVE_OPTION) 
-        {
-            File file = chooser.getSelectedFile();
-            if (file == null) {
-                    //return;
-            }
-            fileName = chooser.getSelectedFile().getAbsolutePath();
-        }
+//        JFileChooser chooser = new JFileChooser(new File(workingDirectory));
+//        int status = chooser.showOpenDialog(parentFrame);
+//        if (status == JFileChooser.APPROVE_OPTION) 
+//        {
+//            File file = chooser.getSelectedFile();
+//            if (file == null) {
+//                    //return;
+//            }
+//            fileName = chooser.getSelectedFile().getAbsolutePath();
+//        }
         File file = new File(fileName);
         try
         {

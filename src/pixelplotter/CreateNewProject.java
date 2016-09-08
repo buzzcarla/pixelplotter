@@ -83,6 +83,16 @@ public class CreateNewProject {
                         if (!directory.exists())
                         {
                             directory.mkdir();
+                            /**Add Project Path to pixelplotter.prjs**/
+                            updateProjectsFile();
+                            String filename= projectPathString + "\\" + "_project.conf";
+                            try {
+                                FileWriter fw = new FileWriter(filename,true); 
+                                fw.write(projectName.getText() + "\n");
+                                fw.close();
+                            } catch (IOException ex) {
+                                Logger.getLogger(CreateNewProject.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                             mainWindow.setVisible(false);
                             PixelPlotterMain.status.setText("New project " + projectName.getText() + " created");
                         }
@@ -155,6 +165,7 @@ public class CreateNewProject {
         //mainWindow.pack();
         mainWindow.setResizable(false);
         mainWindow.setVisible(true);
+        
     }
     
     private void browseActionPerformed()
@@ -173,6 +184,20 @@ public class CreateNewProject {
             }
     }
     
+    private void updateProjectsFile()
+    {
+        try
+        {
+            String filename= System.getProperty("user.dir") + "//pixelplotter.prjs";
+            FileWriter fw = new FileWriter(filename,true); //the true will append the new data
+            fw.write(projectNameString + "," + projectPathString + "\n");
+            fw.close();
+        }
+        catch(IOException ioe)
+        {
+            System.err.println("IOException: " + ioe.getMessage());
+        }
+    }
     public String getWorkingDirectory()
     {
         return projectPathString;
